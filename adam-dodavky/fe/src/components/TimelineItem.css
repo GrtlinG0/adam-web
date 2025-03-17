@@ -1,0 +1,36 @@
+.timeline-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 40px 0;
+}
+
+.timeline-item.odd {
+  flex-direction: row;
+}
+
+.timeline-item.even {
+  flex-direction: row-reverse;
+}
+
+.timeline-date {
+  width: 40%;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.timeline-content {
+  width: 50%;
+  background-color: #2b2b2b;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.timeline-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
