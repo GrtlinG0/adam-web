@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const Timeline = require('../models/Timeline');
+const timeline = require('../models/timeline');
 
 // GET všechny položky časové osy
 router.get('/', async (req, res) => {
   try {
-    const items = await Timeline.find();
+    const items = await timeline.find();
     res.json(items);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 
 // POST nová položka
 router.post('/', async (req, res) => {
-  const timelineItem = new Timeline({
+  const timelineItem = new timeline({
     date: req.body.date,
     title: req.body.title,
     description: req.body.description,
