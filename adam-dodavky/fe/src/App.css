@@ -172,15 +172,18 @@ section#prestavba h2 {
   bottom: 20px;
   right: 20px;
   width: 50px;
-  height: 50px;
+  height: 50px; /* Stejná šířka a výška pro kruh */
   background-color: #00b4d8;
   color: #fff;
   border: none;
-  border-radius: 50%;
+  border-radius: 50%; /* Kulaté tvarování */
   font-size: 24px;
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.3s ease;
+  display: flex; /* Flexbox pro centrování šipky */
+  justify-content: center;
+  align-items: center;
 }
 
 .scroll-to-top.visible {
