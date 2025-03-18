@@ -1,49 +1,135 @@
+/* Celkový kontejner časové osy */
 .timeline {
   position: relative;
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 20px 0;
 }
 
+/* Středová osa (šedá čára) */
 .timeline::before {
   content: '';
   position: absolute;
   width: 2px;
-  background-color: #ffffff;
+  background-color: #888; /* Šedá místo bílé */
   top: 0;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
 }
 
+/* Styl pro jednotlivé položky */
 .timeline-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 40px 0;
+  position: relative;
+  opacity: 0; /* Pro animaci */
+  animation: fadeIn 0.5s ease-in forwards; /* Fade-in animace */
 }
 
-.timeline-item:nth-child(even) {
+/* Animace fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Střídání směru pro sudé a liché položky */
+.timeline-item.odd {
+  flex-direction: row;
+}
+
+.timeline-item.even {
   flex-direction: row-reverse;
 }
 
+/* Tečka na ose pro každou položku */
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: #888; /* Šedá tečka */
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+/* Datum */
 .timeline-date {
   width: 40%;
   font-size: 18px;
   font-weight: bold;
+  color: #ddd; /* Světlejší barva pro kontrast */
+  text-align: right;
+  padding-right: 20px;
 }
 
+/* Obsah */
 .timeline-content {
   width: 50%;
-  background-color: #2b2b2b;
+  background-color: #333; /* Tmavší šedá pro modernější vzhled */
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  color: #fff; /* Bílý text pro lepší čitelnost */
+  transition: transform 0.3s ease; /* Přidána interakce */
 }
 
+/* Hover efekt pro obsah */
+.timeline-content:hover {
+  transform: scale(1.02); /* Mírné zvětšení při najetí myší */
+}
+
+/* Obrázek */
 .timeline-content img {
   max-width: 100%;
   height: auto;
   border-radius: 5px;
   margin-top: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Stín pro obrázky */
 }
 
+/* Responsivní design pro mobily */
+@media (max-width: 768px) {
+  .timeline::before {
+    left: 20px; /* Čára se posune doleva */
+  }
+
+  .timeline-item {
+    flex-direction: column; /* Položky pod sebe */
+    align-items: flex-start;
+    margin: 20px 0;
+  }
+
+  .timeline-item.odd,
+  .timeline-item.even {
+    flex-direction: column; /* Rušíme střídání směru */
+  }
+
+  .timeline-item::before {
+    left: 20px; /* Tečka se posune k čáře */
+  }
+
+  .timeline-date {
+    width: 100%; /* Datum zabere celou šířku */
+    text-align: left;
+    padding-right: 0;
+    padding-bottom: 10px;
+    font-size: 16px;
+  }
+
+  .timeline-content {
+    width: 100%; /* Obsah zabere celou šířku */
+    margin-left: 40px; /* Odsazení od čáry */
+  }
+}
