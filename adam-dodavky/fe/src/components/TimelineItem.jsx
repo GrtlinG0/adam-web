@@ -7,7 +7,7 @@ function TimelineItem({ item }) {
       <div className="timeline-content">
         <h3>{item.title}</h3>
         <p>{item.description}</p>
-        {item.image && <img src={item.image} alt={item.title} />}
+        {item.image && <img src={`http://localhost:3000${item.image}`} alt={item.title} />}
       </div>
     </div>
   );

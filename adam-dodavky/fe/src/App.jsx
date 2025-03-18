@@ -7,7 +7,7 @@ function App() {
   const [timeline, setTimeline] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost/api/timeline')
+    axios.get('http://localhost:3000/api/timeline')
       .then(response => setTimeline(response.data))
       .catch(error => console.error('Chyba:', error));
   }, []);
