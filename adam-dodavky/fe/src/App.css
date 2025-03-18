@@ -1,4 +1,153 @@
-/* Celkový kontejner časové osy */
+/* Základní styl pro celou stránku */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1a1a1a; /* Tmavé pozadí */
+  color: #fff; /* Bílý text */
+  font-family: 'Arial', sans-serif;
+}
+
+.App {
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* Header */
+header {
+  background-color: #222; /* Tmavší pozadí */
+  padding: 20px 40px;
+  position: sticky; /* Sticky header */
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s ease; /* Animace při scrollu */
+}
+
+header.scrolled {
+  background-color: #333; /* Změna barvy při scrollu */
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #00b4d8; /* Modrá barva pro název */
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 8px 16px;
+  border-radius: 5px;
+  transition: all 0.3s ease; /* Animace při najetí */
+}
+
+nav a:hover {
+  background-color: #00b4d8; /* Modré pozadí při najetí */
+  color: #fff;
+}
+
+/* Hero sekce */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 40px;
+  background: linear-gradient(135deg, #2b2b2b 0%, #1a1a1a 100%); /* Gradient pozadí */
+  min-height: 400px;
+  border-bottom: 1px solid #444;
+}
+
+.hero-text {
+  max-width: 50%;
+  animation: slideInLeft 0.8s ease-out; /* Animace textu */
+}
+
+.hero-text h2 {
+  font-size: 36px;
+  margin: 0 0 20px;
+  color: #00b4d8; /* Modrá barva */
+}
+
+.hero-text p {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #00b4d8;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #0096c7; /* Tmavší modrá při najetí */
+  transform: translateY(-2px); /* Mírný posun nahoru */
+  box-shadow: 0 4px 12px rgba(0, 180, 216, 0.4);
+}
+
+.hero-image {
+  max-width: 45%;
+  opacity: 0;
+  animation: fadeInRight 0.8s ease-out forwards; /* Animace obrázku */
+}
+
+.hero-image img {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Animace pro hero sekci */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Sekce Přestavba */
+section#prestavba {
+  padding: 40px;
+}
+
+section#prestavba h2 {
+  font-size: 32px;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #00b4d8;
+}
+
+/* Časová osa */
 .timeline {
   position: relative;
   max-width: 1200px;
@@ -6,130 +155,66 @@
   padding: 20px 0;
 }
 
-/* Středová osa (šedá čára) */
 .timeline::before {
   content: '';
   position: absolute;
   width: 2px;
-  background-color: #888; /* Šedá místo bílé */
+  background-color: #888;
   top: 0;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
 }
 
-/* Styl pro jednotlivé položky */
-.timeline-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 40px 0;
-  position: relative;
-  opacity: 0; /* Pro animaci */
-  animation: fadeIn 0.5s ease-in forwards; /* Fade-in animace */
-}
-
-/* Animace fade-in */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Střídání směru pro sudé a liché položky */
-.timeline-item.odd {
-  flex-direction: row;
-}
-
-.timeline-item.even {
-  flex-direction: row-reverse;
-}
-
-/* Tečka na ose pro každou položku */
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background-color: #888; /* Šedá tečka */
+/* Interaktivní prvek: Scroll-to-top tlačítko */
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #00b4d8;
+  color: #fff;
+  border: none;
   border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
+  font-size: 24px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-/* Datum */
-.timeline-date {
-  width: 40%;
-  font-size: 18px;
-  font-weight: bold;
-  color: #ddd; /* Světlejší barva pro kontrast */
-  text-align: right;
-  padding-right: 20px;
+.scroll-to-top.visible {
+  opacity: 1;
 }
 
-/* Obsah */
-.timeline-content {
-  width: 50%;
-  background-color: #333; /* Tmavší šedá pro modernější vzhled */
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  color: #fff; /* Bílý text pro lepší čitelnost */
-  transition: transform 0.3s ease; /* Přidána interakce */
-}
-
-/* Hover efekt pro obsah */
-.timeline-content:hover {
-  transform: scale(1.02); /* Mírné zvětšení při najetí myší */
-}
-
-/* Obrázek */
-.timeline-content img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 5px;
-  margin-top: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Stín pro obrázky */
-}
-
-/* Responsivní design pro mobily */
+/* Responsivní design */
 @media (max-width: 768px) {
-  .timeline::before {
-    left: 20px; /* Čára se posune doleva */
+  header {
+    flex-direction: column;
+    padding: 15px;
   }
 
-  .timeline-item {
-    flex-direction: column; /* Položky pod sebe */
-    align-items: flex-start;
-    margin: 20px 0;
+  nav {
+    margin-top: 10px;
+    gap: 10px;
   }
 
-  .timeline-item.odd,
-  .timeline-item.even {
-    flex-direction: column; /* Rušíme střídání směru */
+  .hero {
+    flex-direction: column;
+    padding: 40px 20px;
+    text-align: center;
   }
 
-  .timeline-item::before {
-    left: 20px; /* Tečka se posune k čáře */
+  .hero-text {
+    max-width: 100%;
+    margin-bottom: 20px;
   }
 
-  .timeline-date {
-    width: 100%; /* Datum zabere celou šířku */
-    text-align: left;
-    padding-right: 0;
-    padding-bottom: 10px;
-    font-size: 16px;
+  .hero-image {
+    max-width: 80%;
   }
 
-  .timeline-content {
-    width: 100%; /* Obsah zabere celou šířku */
-    margin-left: 40px; /* Odsazení od čáry */
+  section#prestavba {
+    padding: 20px;
   }
 }
