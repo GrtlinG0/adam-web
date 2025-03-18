@@ -7,7 +7,7 @@ function App() {
   const [timeline, setTimeline] = useState([]);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', description: '', deadline: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', description: '', category: 'Přeprava', categoryOther: '', deadline: '' });
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
@@ -101,6 +101,25 @@ function App() {
                 placeholder="Popis zakázky"
                 required
               />
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="Přeprava">Přeprava</option>
+                <option value="Přestavba">Přestavba</option>
+                <option value="Jiné">Jiné</option>
+              </select>
+              {formData.category === 'Jiné' && (
+                <input
+                  type="text"
+                  name="categoryOther"
+                  value={formData.categoryOther}
+                  onChange={handleInputChange}
+                  placeholder="Specifikujte kategorii"
+                />
+              )}
               <input
                 type="date"
                 name="deadline"

@@ -1,5 +1,5 @@
 node_modules/
 dist/
 *.log
-.env
+./adam-dodavky/be/.env
 .DS_Store
