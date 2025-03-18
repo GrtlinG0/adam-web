@@ -221,3 +221,63 @@ section#prestavba h2 {
     padding: 20px;
   }
 }
+
+/* Sekce Zakázky */
+section#zakazky {
+  padding: 40px;
+}
+
+section#zakazky h2 {
+  font-size: 32px;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #00b4d8;
+}
+
+.jobs-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.jobs-form h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.jobs-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.jobs-form input,
+.jobs-form textarea {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #444;
+  color: #fff;
+  font-size: 16px;
+}
+
+.jobs-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.jobs-form input:focus,
+.jobs-form textarea:focus {
+  outline: 2px solid #00b4d8;
+}
+
+.success-message {
+  text-align: center;
+  color: #00b4d8;
+  font-size: 18px;
+  padding: 10px;
+}
