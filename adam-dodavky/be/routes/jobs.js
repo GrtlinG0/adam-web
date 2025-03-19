@@ -4,10 +4,13 @@ const Job = require('../models/job');
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    service: 'protonmail',
+    service: 'gmail',   
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS 
+      pass: process.env.EMAIL_PASS
+    },
+    tls: {
+      rejectUnauthorized: false
     }
   });
 
@@ -26,8 +29,8 @@ router.post('/', async (req, res) => {
     // Email notifikace
     const mailOptions = {
         from: process.env.EMAIL_USER,
-        to: process.env.EMAIL_USER,
-        cc: req.body.email, // Kopie uživateli
+        to: 'adamkural@proton.me',
+        cc: req.body.email,
         subject: `Nová zakázka: ${newJob.category} od ${newJob.name}`,
         text: `
           Jméno: ${newJob.name}
