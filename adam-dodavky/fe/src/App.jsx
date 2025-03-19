@@ -7,8 +7,9 @@ function App() {
   const [timeline, setTimeline] = useState([]);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', description: '', category: 'Přeprava', categoryOther: '', deadline: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', description: '', category: 'Přeprava', categoryOther: '', phone: '', deadline: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(''); // Nový stav pro chyby
 
   useEffect(() => {
     axios.get('http://localhost:3000/api/timeline')
@@ -36,6 +37,7 @@ function App() {
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError('');
   };
 
   const handleSubmit = (e) => {
@@ -43,10 +45,13 @@ function App() {
     axios.post('http://localhost:3000/api/jobs', formData)
       .then(() => {
         setSubmitted(true);
-        setFormData({ name: '', email: '', description: '', deadline: '' });
-        setTimeout(() => setSubmitted(false), 3000); // Potvrzení zmizí po 3s
+        setFormData({ name: '', email: '', description: '', category: 'Přeprava', categoryOther: '', phone: '', deadline: '' });
+        setTimeout(() => setSubmitted(false), 3000);
       })
-      .catch(error => console.error('Chyba při odeslání:', error));
+      .catch(error => {
+        setError('Chyba při odeslání: ' + (error.response?.data?.message || 'Něco se pokazilo. Zkontrolujte údaje a zkuste znovu.'));
+        console.error('Chyba při odeslání:', error);
+      });
   };
 
   return (
@@ -78,6 +83,7 @@ function App() {
             <p className="success-message">Děkujeme, ozveme se vám!</p>
           ) : (
             <form onSubmit={handleSubmit}>
+              {error && <p className="error-message">{error}</p>}
               <input
                 type="text"
                 name="name"
@@ -93,6 +99,13 @@ function App() {
                 onChange={handleInputChange}
                 placeholder="Váš email"
                 required
+              />
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                placeholder="Telefonní číslo (volitelné)"
               />
               <textarea
                 name="description"
@@ -117,7 +130,7 @@ function App() {
                   name="categoryOther"
                   value={formData.categoryOther}
                   onChange={handleInputChange}
-                  placeholder="Specifikujte kategorii"
+                  placeholder="Specifikasi kategorii"
                 />
               )}
               <input
