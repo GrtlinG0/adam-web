@@ -7,9 +7,17 @@ function App() {
   const [timeline, setTimeline] = useState([]);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', description: '', category: 'Přeprava', categoryOther: '', phone: '', deadline: '' });
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    email: '', 
+    description: '', 
+    category: 'Přeprava', 
+    categoryOther: '', 
+    phone: '', 
+    deadline: '' 
+  });
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState(''); // Nový stav pro chyby
+  const [error, setError] = useState('');
 
   useEffect(() => {
     axios.get('http://localhost:3000/api/timeline')
@@ -35,6 +43,20 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => {
+        const firstItem = document.querySelector('.timeline-item');
+        if (firstItem) {
+          firstItem.classList.add('highlight');
+          setTimeout(() => firstItem.classList.remove('highlight'), 2000);
+        }
+      }, 500);
+    }
+  };
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError('');
@@ -42,6 +64,7 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Odesílaná data:', formData);
     axios.post('http://localhost:3000/api/jobs', formData)
       .then(() => {
         setSubmitted(true);
@@ -66,12 +89,12 @@ function App() {
 
       <section className="hero">
         <div className="hero-text">
-          <h2>Vítejte na mém projektu</h2>
-          <p>Sdílím zde své zakázky s dodávkou a postupnou přestavbu na obytný vůz.</p>
-          <a href="#prestavba" className="btn">Zjistit více</a>
+          <h2>Vítejte na mém webu!</h2>
+          <p>Jmenuji se Adam Kural a momentálně přestavuji svého Citroëna Jumpera L4H2 na obytný vůz, který mi umožní žít nomádský život. Pracuji jako DevOps konzultant, a tento projekt je můj způsob, jak skloubit vášeň pro technologie s touhou po svobodě a cestování. Zde sdílím své zakázky a postup přestavby – pojďte se podívat!</p>
+          <button onClick={() => scrollToSection('prestavba')} className="btn">Zjistit více</button>
         </div>
         <div className="hero-image">
-          <img src="/dodavka.jpg" alt="Moje dodávka" />
+          <img src="/dodavka.jpg" alt="Citroën Jumper L4H2" />
         </div>
       </section>
 
@@ -84,62 +107,19 @@ function App() {
           ) : (
             <form onSubmit={handleSubmit}>
               {error && <p className="error-message">{error}</p>}
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="Vaše jméno"
-                required
-              />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="Váš email"
-                required
-              />
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="Telefonní číslo (volitelné)"
-              />
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Popis zakázky"
-                required
-              />
-              <select
-                name="category"
-                value={formData.category}
-                onChange={handleInputChange}
-                required
-              >
+              <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="Vaše jméno" required />
+              <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="Váš email" required />
+              <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="Telefonní číslo (volitelné)" />
+              <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder="Popis zakázky" required />
+              <select name="category" value={formData.category} onChange={handleInputChange} required>
                 <option value="Přeprava">Přeprava</option>
                 <option value="Přestavba">Přestavba</option>
                 <option value="Jiné">Jiné</option>
               </select>
               {formData.category === 'Jiné' && (
-                <input
-                  type="text"
-                  name="categoryOther"
-                  value={formData.categoryOther}
-                  onChange={handleInputChange}
-                  placeholder="Specifikasi kategorii"
-                />
+                <input type="text" name="categoryOther" value={formData.categoryOther} onChange={handleInputChange} placeholder="Specifikujte kategorii" />
               )}
-              <input
-                type="date"
-                name="deadline"
-                value={formData.deadline}
-                onChange={handleInputChange}
-                placeholder="Preferovaný termín"
-              />
+              <input type="date" name="deadline" value={formData.deadline} onChange={handleInputChange} placeholder="Preferovaný termín" />
               <button type="submit" className="btn">Odeslat poptávku</button>
             </form>
           )}
@@ -155,10 +135,7 @@ function App() {
         </div>
       </section>
 
-      <button
-        className={`scroll-to-top ${showScrollTop ? 'visible' : ''}`}
-        onClick={scrollToTop}
-      >
+      <button className={`scroll-to-top ${showScrollTop ? 'visible' : ''}`} onClick={scrollToTop}>
         ↑
       </button>
     </div>
