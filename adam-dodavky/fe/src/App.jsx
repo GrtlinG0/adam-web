@@ -7,17 +7,12 @@ function App() {
   const [timeline, setTimeline] = useState([]);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [formData, setFormData] = useState({ 
-    name: '', 
-    email: '', 
-    description: '', 
-    category: 'Přeprava', 
-    categoryOther: '', 
-    phone: '', 
-    deadline: '' 
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', description: '', category: 'Přeprava', categoryOther: '', phone: '', deadline: '' });
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const [token, setToken] = useState(localStorage.getItem('token') || null); // Načtení z localStorage
+  const [loginData, setLoginData] = useState({ username: '', password: '' });
+  const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
     axios.get('http://localhost:3000/api/timeline')
@@ -39,9 +34,13 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  useEffect(() => {
+    if (token) {
+      fetchJobs(token); // Načte zakázky, pokud je token uložený
+    }
+  }, [token]);
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
@@ -62,6 +61,10 @@ function App() {
     setError('');
   };
 
+  const handleLoginChange = (e) => {
+    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Odesílaná data:', formData);
@@ -77,6 +80,34 @@ function App() {
       });
   };
 
+  const handleLogin = (e) => {
+    e.preventDefault();
+    axios.post('http://localhost:3000/api/auth/login', loginData)
+      .then(response => {
+        const newToken = response.data.token;
+        setToken(newToken);
+        localStorage.setItem('token', newToken); // Uložení tokenu
+        setLoginData({ username: '', password: '' });
+        setError('');
+      })
+      .catch(error => setError(error.response?.data?.message || 'Přihlášení selhalo'));
+  };
+
+  const fetchJobs = (jwtToken) => {
+    axios.get('http://localhost:3000/api/jobs', { headers: { Authorization: `Bearer ${jwtToken}` } })
+      .then(response => setJobs(response.data))
+      .catch(error => {
+        console.error('Chyba při načítání zakázek:', error);
+        setError('Nepodařilo se načíst zakázky');
+      });
+  };
+
+  const handleLogout = () => {
+    setToken(null);
+    localStorage.removeItem('token');
+    setJobs([]);
+  };
+
   return (
     <div className="App">
       <header className={isScrolled ? 'scrolled' : ''}>
@@ -84,6 +115,7 @@ function App() {
         <nav>
           <a href="#zakazky">Zakázky</a>
           <a href="#prestavba">Přestavba</a>
+          {token && <button onClick={handleLogout} className="btn">Odhlásit</button>}
         </nav>
       </header>
 
@@ -97,6 +129,52 @@ function App() {
           <img src="/dodavka.jpg" alt="Citroën Jumper L4H2" />
         </div>
       </section>
+
+      {token === null ? (
+        <section id="login">
+          <h2>Přihlášení</h2>
+          <form onSubmit={handleLogin} className="login-form">
+            {error && <p className="error-message">{error}</p>}
+            <input type="text" name="username" value={loginData.username} onChange={handleLoginChange} placeholder="Uživatelské jméno" required />
+            <input type="password" name="password" value={loginData.password} onChange={handleLoginChange} placeholder="Heslo" required />
+            <button type="submit" className="btn">Přihlásit</button>
+          </form>
+        </section>
+      ) : (
+        <section id="jobs-list">
+          <h2>Seznam zakázek</h2>
+          <div className="jobs-table">
+            {jobs.length > 0 ? (
+              <table>
+                <thead>
+                  <tr>
+                    <th>Jméno</th>
+                    <th>Email</th>
+                    <th>Telefon</th>
+                    <th>Popis</th>
+                    <th>Kategorie</th>
+                    <th>Termín</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {jobs.map(job => (
+                    <tr key={job._id}>
+                      <td>{job.name}</td>
+                      <td>{job.email}</td>
+                      <td>{job.phone || 'Neuveden'}</td>
+                      <td>{job.description}</td>
+                      <td>{job.category}{job.categoryOther ? ` (${job.categoryOther})` : ''}</td>
+                      <td>{job.deadline || 'Neuveden'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p>Žádné zakázky k zobrazení.</p>
+            )}
+          </div>
+        </section>
+      )}
 
       <section id="zakazky">
         <h2>Zakázky</h2>

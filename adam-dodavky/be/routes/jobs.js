@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Job = require('../models/job');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -19,6 +20,17 @@ transporter.verify((error, success) => {
   }
 });
 
+const authenticateToken = (req, res, next) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) return res.status(401).json({ message: 'Přístup odepřen' });
+    
+    jwt.verify(token, process.env.JWT_SECRET || 'tajny-klic', (err, user) => {
+      if (err) return res.status(403).json({ message: 'Neplatný token' });
+      req.user = user;
+      next();
+    });
+  };
+
 router.post('/', async (req, res) => {
   console.log('Přijatá data:', req.body);
   const job = new Job({
@@ -33,8 +45,8 @@ router.post('/', async (req, res) => {
 
   try {
     const newJob = await job.save();
-    console.log('Uložená zakázka:', newJob);
-    
+    console.log('Uložená zakázka v DB:', newJob.toObject());
+
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: 'adamkural@proton.me',
@@ -52,6 +64,7 @@ router.post('/', async (req, res) => {
       `
     };
 
+    console.log('Mail options:', mailOptions);
     await transporter.sendMail(mailOptions);
     res.status(201).json(newJob);
   } catch (err) {
@@ -60,4 +73,13 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.get('/', authenticateToken, async (req, res) => {
+    try {
+      const jobs = await Job.find();
+      res.json(jobs);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+  
 module.exports = router;

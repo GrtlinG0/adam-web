@@ -141,9 +141,9 @@ nav a:hover {
 }
 
 .timeline-item.highlight {
-  transform: scale(1.05);
+  transform: translateY(-10px) scale(1.05);
   background: rgba(0, 180, 216, 0.1);
-  box-shadow: 0 5px 15px rgba(0, 180, 216, 0.3);
+  box-shadow: 0 10px 20px rgba(0, 180, 216, 0.3);
 }
 
 /* Sekce Přestavba */
@@ -323,4 +323,68 @@ section#zakazky h2 {
   font-size: 16px;
   text-align: center;
   margin-bottom: 10px;
+}
+
+/* Přihlášení */
+#login {
+  padding: 40px;
+  text-align: center;
+}
+
+#login h2 {
+  font-size: 32px;
+  color: #00b4d8;
+  margin-bottom: 20px;
+}
+
+.login-form {
+  max-width: 400px;
+  margin: 0 auto;
+  background: #333;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Seznam zakázek */
+#jobs-list {
+  padding: 40px;
+}
+
+#jobs-list h2 {
+  font-size: 32px;
+  text-align: center;
+  color: #00b4d8;
+  margin-bottom: 40px;
+}
+
+.jobs-table {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.jobs-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #333;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.jobs-table th, .jobs-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #444;
+}
+
+.jobs-table th {
+  background: #00b4d8;
+  color: #fff;
+}
+
+.jobs-table tr:nth-child(even) {
+  background: #3a3a3a;
 }
