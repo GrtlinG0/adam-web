@@ -388,3 +388,24 @@ section#zakazky h2 {
 .jobs-table tr:nth-child(even) {
   background: #3a3a3a;
 }
+/* Auth stránka */
+.auth-page {
+  padding: 40px;
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.logout-btn {
+  margin-top: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Navigace - úprava pro Link */
+nav .btn {
+  margin-left: 20px;
+}
