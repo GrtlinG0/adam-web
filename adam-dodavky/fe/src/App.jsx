@@ -4,6 +4,21 @@ import axios from 'axios';
 import './App.css';
 import TimelineItem from './components/TimelineItem.jsx';
 
+function Header({ isScrolled }) {
+  return (
+    <header className={isScrolled ? 'scrolled' : ''}>
+      <h1>
+        <Link to="/" className="logo-link">Adam Dodávky</Link>
+      </h1>
+      <nav>
+        <a href="#zakazky">Zakázky</a>
+        <a href="#prestavba">Přestavba</a>
+        <Link to="/auth" className="btn">Přihlášení</Link>
+      </nav>
+    </header>
+  );
+}
+
 function Home({ scrollToSection }) {
   const [timeline, setTimeline] = useState([]);
   const [formData, setFormData] = useState({ name: '', email: '', description: '', category: 'Přeprava', categoryOther: '', phone: '', deadline: '' });
@@ -37,11 +52,11 @@ function Home({ scrollToSection }) {
   };
 
   return (
-    <>
+    <div className="page">
       <section className="hero">
         <div className="hero-text">
           <h2>Vítejte na mém webu!</h2>
-          <p>Jmenuji se Adam Kural a momentálně přestavuji svého Citroëna Jumpera L4H2 na obytný vůz, který mi umožní žít nomádský život. Pracuji jako DevOps konzultant, a tento projekt je můj způsob, jak skloubit vášeň pro technologie s touhou po svobodě a cestování. Zde sdílím své zakázky a postup přestavby – pojďte se podívat!</p>
+          <p>Jmenuji se Adam a momentálně přestavuji svého Citroën Jumpera L4H2 na obytný vůz. Pracuji jako DevOps konzultant a tento projekt je můj způsob, jak skloubit vášeň pro technologie s touhou po svobodě a cestování. Zde sdílím své zakázky a postup přestavby – pojďte se podívat!</p>
           <button onClick={() => scrollToSection('prestavba')} className="btn">Zjistit více</button>
         </div>
         <div className="hero-image">
@@ -85,7 +100,7 @@ function Home({ scrollToSection }) {
           ))}
         </div>
       </section>
-    </>
+    </div>
   );
 }
 
@@ -137,52 +152,56 @@ function Auth() {
 
   return (
     <div className="auth-page">
-      {token === null ? (
-        <section id="login">
-          <h2>Přihlášení</h2>
-          <form onSubmit={handleLogin} className="login-form">
-            {error && <p className="error-message">{error}</p>}
-            <input type="text" name="username" value={loginData.username} onChange={handleLoginChange} placeholder="Uživatelské jméno" required />
-            <input type="password" name="password" value={loginData.password} onChange={handleLoginChange} placeholder="Heslo" required />
-            <button type="submit" className="btn">Přihlásit</button>
-          </form>
-        </section>
-      ) : (
-        <section id="jobs-list">
-          <h2>Seznam zakázek</h2>
-          <div className="jobs-table">
-            {jobs.length > 0 ? (
-              <table>
-                <thead>
-                  <tr>
-                    <th>Jméno</th>
-                    <th>Email</th>
-                    <th>Telefon</th>
-                    <th>Popis</th>
-                    <th>Kategorie</th>
-                    <th>Termín</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {jobs.map(job => (
-                    <tr key={job._id}>
-                      <td>{job.name}</td>
-                      <td>{job.email}</td>
-                      <td>{job.phone || 'Neuveden'}</td>
-                      <td>{job.description}</td>
-                      <td>{job.category}{job.categoryOther ? ` (${job.categoryOther})` : ''}</td>
-                      <td>{job.deadline || 'Neuveden'}</td>
+      <div className="auth-content">
+        {token === null ? (
+          <section id="login">
+            <h2>Přihlášení</h2>
+            <form onSubmit={handleLogin} className="login-form">
+              {error && <p className="error-message">{error}</p>}
+              <input type="text" name="username" value={loginData.username} onChange={handleLoginChange} placeholder="Uživatelské jméno" required />
+              <input type="password" name="password" value={loginData.password} onChange={handleLoginChange} placeholder="Heslo" required />
+              <button type="submit" className="btn">Přihlásit</button>
+            </form>
+            <Link to="/" className="btn home-btn">Domů</Link>
+          </section>
+        ) : (
+          <section id="jobs-list">
+            <h2>Seznam zakázek</h2>
+            <div className="jobs-table">
+              {jobs.length > 0 ? (
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Jméno</th>
+                      <th>Email</th>
+                      <th>Telefon</th>
+                      <th>Popis</th>
+                      <th>Kategorie</th>
+                      <th>Termín</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <p>Žádné zakázky k zobrazení.</p>
-            )}
-          </div>
-          <button onClick={handleLogout} className="btn logout-btn">Odhlásit</button>
-        </section>
-      )}
+                  </thead>
+                  <tbody>
+                    {jobs.map(job => (
+                      <tr key={job._id}>
+                        <td>{job.name}</td>
+                        <td>{job.email}</td>
+                        <td>{job.phone || 'Neuveden'}</td>
+                        <td>{job.description}</td>
+                        <td>{job.category}{job.categoryOther ? ` (${job.categoryOther})` : ''}</td>
+                        <td>{job.deadline || 'Neuveden'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p>Žádné zakázky k zobrazení.</p>
+              )}
+            </div>
+            <button onClick={handleLogout} className="btn logout-btn">Odhlásit</button>
+            <Link to="/" className="btn home-btn">Domů</Link>
+          </section>
+        )}
+      </div>
     </div>
   );
 }
@@ -224,21 +243,11 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <header className={isScrolled ? 'scrolled' : ''}>
-          <h1>Adam Dodávky</h1>
-          <nav>
-            <Link to="/">Domů</Link>
-            <a href="#zakazky">Zakázky</a>
-            <a href="#prestavba">Přestavba</a>
-            <Link to="/auth" className="btn">Přihlášení</Link>
-          </nav>
-        </header>
-
+        <Header isScrolled={isScrolled} />
         <Routes>
           <Route path="/" element={<Home scrollToSection={scrollToSection} />} />
           <Route path="/auth" element={<Auth />} />
         </Routes>
-
         <button className={`scroll-to-top ${showScrollTop ? 'visible' : ''}`} onClick={scrollToTop}>
           ↑
         </button>

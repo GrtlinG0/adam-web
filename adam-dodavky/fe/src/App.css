@@ -114,6 +114,17 @@ nav a:hover {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes slideInLeft {
   from {
     opacity: 0;
@@ -319,38 +330,70 @@ section#zakazky h2 {
 }
 
 .error-message {
-  color: #ff4444;
-  font-size: 16px;
-  text-align: center;
-  margin-bottom: 10px;
+  color: #ff4d4d;
+  font-size: 14px;
+  margin: 0 0 10px;
 }
 
 /* Přihlášení */
 #login {
+  background: #333;
   padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 500px;
   text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
 #login h2 {
   font-size: 32px;
   color: #00b4d8;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .login-form {
-  max-width: 400px;
-  margin: 0 auto;
-  background: #333;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
+}
+
+.login-form input {
+  padding: 12px 16px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background: #444;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.login-form input:focus {
+  outline: none;
+  background: #555;
+  box-shadow: 0 0 8px rgba(0, 180, 216, 0.5);
+}
+
+.login-form button.btn {
+  padding: 12px;
+  font-size: 18px;
+  background: #00b4d8;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.login-form button.btn:hover {
+  background: #0096c7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 180, 216, 0.4);
 }
 
 /* Seznam zakázek */
 #jobs-list {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 40px;
 }
 
@@ -388,24 +431,54 @@ section#zakazky h2 {
 .jobs-table tr:nth-child(even) {
   background: #3a3a3a;
 }
+
+.page, .auth-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #2b2b2b 0%, #1a1a1a 100%);
+}
+
 /* Auth stránka */
 .auth-page {
-  padding: 40px;
-  min-height: 80vh;
-  display: flex;
   justify-content: center;
   align-items: center;
+  padding: 40px;
+}
+
+.auth-content {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
   flex-direction: column;
+  align-items: center;
+}
+
+.logo-link {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.logo-link:hover {
+  color: #00b4d8;
+}
+
+.home-btn {
+  margin-top: 20px;
+  background: #444;
+}
+
+.home-btn:hover {
+  background: #555;
+  transform: translateY(-2px);
 }
 
 .logout-btn {
-  margin-top: 20px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin-top: 30px;
 }
 
-/* Navigace - úprava pro Link */
 nav .btn {
   margin-left: 20px;
 }
